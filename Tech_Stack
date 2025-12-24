@@ -1,0 +1,8 @@
+## Tech Stack
+
+- Python
+- FAISS
+- Sentence Transformers
+- Ollama (local LLM)
+- Flask
+- Pandas
