@@ -1,0 +1,98 @@
+/* ===== Base ===== */
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #000;
+}
+
+/* ===== Container ===== */
+.container {
+  width: 100%;
+  max-width: 900px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 28px;
+}
+
+/* ===== Input Bar ===== */
+.input-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 28px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+/* Left section */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.icon {
+  font-size: 20px;
+  color: #555;
+  cursor: pointer;
+}
+
+/* Input */
+input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+}
+
+input::placeholder {
+  color: #888;
+}
+
+/* ===== Right Actions ===== */
+.right-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Outline mic */
+.mic-outline {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Voice / send button */
+.voice-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.voice-btn span {
+  color: #fff;
+  font-size: 16px;
+}

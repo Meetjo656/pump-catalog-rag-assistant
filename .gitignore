@@ -1,0 +1,18 @@
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Vector store artifacts (can be regenerated)
+vector_store/*.faiss
+vector_store/*.pkl
+
+# Data files (if sensitive)
+data/*.xlsx
+data/*.csv
+
+# OS files
+.DS_Store
+Thumbs.db

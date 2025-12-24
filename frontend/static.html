@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pump Info AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      padding: 12px 20px;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #202123;
+    }
+
+    .settings-btn {
+      background: none;
+      border: 1px solid #d1d5db;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #374151;
+    }
+
+    .settings-btn:hover {
+      background: #f9fafb;
+    }
+
+    /* Chat Area */
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message-wrapper {
+      width: 100%;
+      padding: 24px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .message-wrapper.user {
+      background: #f7f7f8;
+    }
+
+    .message-wrapper.bot {
+      background: #ffffff;
+    }
+
+    .message-content {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 24px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    .message-content.user {
+      font-weight: 500;
+    }
+
+    /* Input Area */
+    .input-container {
+      border-top: 1px solid #e5e5e5;
+      padding: 16px 20px 20px;
+      background: #ffffff;
+    }
+
+    .input-wrapper {
+      max-width: 768px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .input-box {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 12px 50px 12px 16px;
+      font-size: 16px;
+      resize: none;
+      outline: none;
+      font-family: inherit;
+      box-shadow: 0 0 0 0 rgba(0,0,0,0);
+      transition: all 0.15s;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .input-box:focus {
+      border-color: #10a37f;
+      box-shadow: 0 0 0 1px #10a37f;
+    }
+
+    .send-button {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 6px;
+      background: #10a37f;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .send-button:hover:not(:disabled) {
+      background: #0e8c6f;
+    }
+
+    .send-button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+    }
+
+    /* Query Builder Panel */
+    .query-panel {
+      position: fixed;
+      right: -400px;
+      top: 0;
+      width: 380px;
+      height: 100vh;
+      background: white;
+      border-left: 1px solid #e5e5e5;
+      padding: 20px;
+      overflow-y: auto;
+      transition: right 0.3s;
+      z-index: 1000;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    }
+
+    .query-panel.open {
+      right: 0;
+    }
+
+    .query-panel h3 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: #202123;
+    }
+
+    .panel-field {
+      margin-bottom: 14px;
+    }
+
+    .panel-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+
+    .panel-field select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .apply-btn {
+      width: 100%;
+      padding: 10px;
+      background: #10a37f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .apply-btn:hover:not(:disabled) {
+      background: #0e8c6f;
+    }
+
+    .apply-btn:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+    }
+
+    .close-panel {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    /* Welcome Screen */
+    .welcome {
+      max-width: 768px;
+      margin: auto;
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .welcome h2 {
+      font-size: 28px;
+      margin-bottom: 32px;
+      color: #202123;
+    }
+
+    .example-prompts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .example-card {
+      padding: 16px;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .example-card:hover {
+      background: #f7f7f8;
+      border-color: #10a37f;
+      box-shadow: 0 2px 8px rgba(16, 163, 127, 0.1);
+    }
+
+    .example-card h4 {
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: #374151;
+    }
+
+    .example-card p {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .example-card .hint {
+      font-size: 11px;
+      color: #10a37f;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    .loading {
+      color: #6b7280;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>Pump Info AI</h1>
+    <button class="settings-btn" onclick="togglePanel()">⚙️ Options</button>
+  </div>
+
+  <!-- Chat Area -->
+  <div class="chat-container" id="chat-container">
+    <div class="welcome" id="welcome">
+      <h2>How can I help with pump information?</h2>
+      <div class="example-prompts">
+        <div class="example-card" onclick="openBuilderWithIntent('view_specs')">
+          <h4>📊 View specifications</h4>
+          <p>Get technical details for any pump model</p>
+          <p class="hint">→ Opens builder</p>
+        </div>
+        <div class="example-card" onclick="openBuilderWithIntent('compare_models')">
+          <h4>⚖️ Compare models</h4>
+          <p>See differences between pumps</p>
+          <p class="hint">→ Opens builder</p>
+        </div>
+        <div class="example-card" onclick="openBuilderWithIntent('explain_suitability')">
+          <h4>💡 Pump suitability</h4>
+          <p>Find the right pump for your needs</p>
+          <p class="hint">→ Opens builder</p>
+        </div>
+        <div class="example-card" onclick="openBuilderWithIntent('installation_guidance')">
+          <h4>🔧 Installation help</h4>
+          <p>Learn how to install and maintain</p>
+          <p class="hint">→ Opens builder</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="input-container">
+    <div class="input-wrapper">
+      <textarea 
+        id="input-box" 
+        class="input-box" 
+        rows="1" 
+        placeholder="Ask about pump specifications, comparisons, or recommendations..."
+      ></textarea>
+      <button class="send-button" id="send-btn" onclick="sendMessage()">↑</button>
+    </div>
+  </div>
+
+  <!-- Query Builder Panel -->
+  <div class="query-panel" id="query-panel">
+    <button class="close-panel" onclick="togglePanel()">×</button>
+    <h3>Structured Query Builder</h3>
+
+    <div class="panel-field">
+      <label for="intent">What would you like to do?</label>
+      <select id="intent">
+        <option value="">-- Select --</option>
+        <option value="explain_suitability">Explain pump suitability</option>
+        <option value="compare_models">Compare two pump models</option>
+        <option value="installation_guidance">View installation guidelines</option>
+        <option value="view_specs">View technical specifications</option>
+      </select>
+    </div>
+
+    <div class="panel-field" id="modelA-wrapper" style="display: none;">
+      <label for="modelA">Pump model</label>
+      <select id="modelA"></select>
+    </div>
+
+    <div class="panel-field" id="modelB-wrapper" style="display: none;">
+      <label for="modelB">Second pump model</label>
+      <select id="modelB"></select>
+    </div>
+
+    <div class="panel-field" id="application-wrapper" style="display: none;">
+      <label for="application">Application / usage</label>
+      <select id="application">
+        <option value="">General</option>
+        <option value="domestic">Domestic</option>
+        <option value="agricultural">Agricultural</option>
+        <option value="industrial">Industrial</option>
+      </select>
+    </div>
+
+    <div class="panel-field" id="focus-wrapper" style="display: none;">
+      <label for="focus">Explanation focus</label>
+      <select id="focus">
+        <option value="">Overall</option>
+        <option value="performance">Performance</option>
+        <option value="energy_efficiency">Energy efficiency</option>
+        <option value="installation_maintenance">Installation & maintenance</option>
+        <option value="cost">Cost considerations</option>
+      </select>
+    </div>
+
+    <button class="apply-btn" id="apply-btn" onclick="applyStructuredQuery()" disabled>Apply Query</button>
+  </div>
+
+  <script>
+    const API_URL = "http://127.0.0.1:5000/ask";
+    const PUMP_MODELS = [
+      "MDH-36A (C.I.)",
+      "MDL-4SP/TC",
+      "LHP-3B",
+      "MH series",
+      "MHN series",
+      "MCJ-051SP",
+      "SMSJ-071"
+    ];
+
+    // Populate dropdowns
+    const modelASel = document.getElementById("modelA");
+    const modelBSel = document.getElementById("modelB");
+    PUMP_MODELS.forEach(m => {
+      modelASel.appendChild(new Option(m, m));
+      modelBSel.appendChild(new Option(m, m));
+    });
+
+    // Panel toggle
+    function togglePanel() {
+      document.getElementById("query-panel").classList.toggle("open");
+    }
+
+    // Open builder with pre-selected intent
+    function openBuilderWithIntent(intent) {
+      const intentSelect = document.getElementById("intent");
+      intentSelect.value = intent;
+      
+      // Trigger change event to show relevant fields
+      const event = new Event('change');
+      intentSelect.dispatchEvent(event);
+      
+      // Open the panel
+      document.getElementById("query-panel").classList.add("open");
+    }
+
+    // Intent change
+    document.getElementById("intent").addEventListener("change", (e) => {
+      const intent = e.target.value;
+      const modelAWrap = document.getElementById("modelA-wrapper");
+      const modelBWrap = document.getElementById("modelB-wrapper");
+      const appWrap = document.getElementById("application-wrapper");
+      const focusWrap = document.getElementById("focus-wrapper");
+      const applyBtn = document.getElementById("apply-btn");
+
+      modelAWrap.style.display = "none";
+      modelBWrap.style.display = "none";
+      appWrap.style.display = "none";
+      focusWrap.style.display = "none";
+      applyBtn.disabled = !intent;
+
+      if (!intent) return;
+
+      if (intent === "explain_suitability") {
+        modelAWrap.style.display = "block";
+        appWrap.style.display = "block";
+        focusWrap.style.display = "block";
+      } else if (intent === "compare_models") {
+        modelAWrap.style.display = "block";
+        modelBWrap.style.display = "block";
+        appWrap.style.display = "block";
+        focusWrap.style.display = "block";
+      } else if (intent === "installation_guidance" || intent === "view_specs") {
+        modelAWrap.style.display = "block";
+      }
+    });
+
+    // Prevent selecting same model in comparison
+    modelASel.addEventListener("change", () => {
+      const selected = modelASel.value;
+      [...modelBSel.options].forEach(opt => {
+        opt.disabled = (opt.value && opt.value === selected);
+      });
+    });
+
+    // Apply structured query
+    function applyStructuredQuery() {
+      const intent = document.getElementById("intent").value;
+      const modelA = document.getElementById("modelA").value;
+      const modelB = document.getElementById("modelB").value;
+      const application = document.getElementById("application").value;
+      const focus = document.getElementById("focus").value;
+
+      if (!intent) {
+        alert("Please select what you'd like to do");
+        return;
+      }
+
+      const params = {};
+
+      // Validate required fields
+      if (intent === "explain_suitability" || intent === "installation_guidance" || intent === "view_specs") {
+        if (!modelA) {
+          alert("Please select a pump model");
+          return;
+        }
+        params.modelA = modelA;
+      }
+
+      if (intent === "compare_models") {
+        if (!modelA || !modelB) {
+          alert("Please select both pump models");
+          return;
+        }
+        if (modelA === modelB) {
+          alert("Please select two different pump models");
+          return;
+        }
+        params.modelA = modelA;
+        params.modelB = modelB;
+      }
+
+      if (application) params.application = application;
+      if (focus) params.focus = focus;
+
+      // Send structured query
+      sendStructuredQuery(intent, params);
+      togglePanel();
+    }
+
+    // Send structured query
+    async function sendStructuredQuery(intent, params) {
+      // Hide welcome
+      document.getElementById("welcome").style.display = "none";
+
+      // Create user-visible text
+      let userText = "";
+      if (intent === "explain_suitability") {
+        userText = `Explain: ${params.modelA} for ${params.application || 'general'} use`;
+      } else if (intent === "compare_models") {
+        userText = `Compare: ${params.modelA} vs ${params.modelB}`;
+      } else if (intent === "installation_guidance") {
+        userText = `Installation guide: ${params.modelA}`;
+      } else if (intent === "view_specs") {
+        userText = `Specifications: ${params.modelA}`;
+      }
+
+      // Add user message
+      addMessage(userText, true);
+
+      // Add loading message
+      const loadingDiv = addMessage("Processing your request...", false);
+      loadingDiv.classList.add("loading");
+
+      document.getElementById("send-btn").disabled = true;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ intent, params })
+        });
+
+        const data = await res.json();
+        loadingDiv.remove();
+        addMessage(data.answer || data.error || "No response", false);
+      } catch (err) {
+        loadingDiv.remove();
+        addMessage("Error: " + err.message, false);
+      }
+
+      document.getElementById("send-btn").disabled = false;
+    }
+
+    // Send message
+    async function sendMessage() {
+      const inputBox = document.getElementById("input-box");
+      const text = inputBox.value.trim();
+      if (!text) return;
+
+      // Hide welcome
+      document.getElementById("welcome").style.display = "none";
+
+      // Add user message
+      addMessage(text, true);
+      inputBox.value = "";
+      inputBox.style.height = "auto";
+
+      // Add loading message
+      const loadingDiv = addMessage("Thinking...", false);
+      loadingDiv.classList.add("loading");
+
+      document.getElementById("send-btn").disabled = true;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: text })
+        });
+
+        const data = await res.json();
+        loadingDiv.remove();
+        addMessage(data.answer || data.error || "No response", false);
+      } catch (err) {
+        loadingDiv.remove();
+        addMessage("Error: " + err.message, false);
+      }
+
+      document.getElementById("send-btn").disabled = false;
+    }
+
+    // Add message to chat
+    function addMessage(text, isUser) {
+      const wrapper = document.createElement("div");
+      wrapper.className = `message-wrapper ${isUser ? 'user' : 'bot'}`;
+      
+      const content = document.createElement("div");
+      content.className = `message-content ${isUser ? 'user' : 'bot'}`;
+      content.textContent = text;
+      
+      wrapper.appendChild(content);
+      document.getElementById("chat-container").appendChild(wrapper);
+      
+      wrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+      
+      return content;
+    }
+
+    // Auto-resize textarea
+    document.getElementById("input-box").addEventListener("input", function() {
+      this.style.height = "auto";
+      this.style.height = Math.min(this.scrollHeight, 200) + "px";
+    });
+
+    // Enter to send
+    document.getElementById("input-box").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
