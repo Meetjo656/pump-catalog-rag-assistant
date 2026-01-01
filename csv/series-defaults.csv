@@ -1,0 +1,112 @@
+series_family,default_spec_category,default_spec_name,default_spec_value,default_unit
+CSP,Material,Body Material,Cast Iron,
+CSP,Material,Impeller Material,SS304,
+CSP,Electrical,Frequency,50,Hz
+CSP,Electrical,Voltage,220-240,V
+CSP,Performance,Application Type,Drainage,
+CSP,Commercial,Typical Price Range,12000-16000,INR
+CSP,Warranty,Warranty Period,2,years
+LAP,Material,Body Material,Cast Iron,
+LAP,Material,Impeller Material,SS304,
+LAP,Electrical,Frequency,50,Hz
+LAP,Performance,Application Type,Drainage,
+LAP,Commercial,Typical Price Range,10000-17000,INR
+LAP,Warranty,Warranty Period,2,years
+LFP,Material,Body Material,Cast Iron,
+LFP,Material,Impeller Material,SS304,
+LFP,Electrical,Frequency,50,Hz
+LFP,Performance,Application Type,Sewage Pumping,
+LFP,Commercial,Typical Price Range,15000-25000,INR
+LFP,Warranty,Warranty Period,2,years
+LHP,Material,Body Material,Cast Iron,
+LHP,Material,Impeller Material,Hardened Cast Iron,
+LHP,Electrical,Frequency,50,Hz
+LHP,Electrical,Phase,Three Phase,
+LHP,Performance,Application Type,Heavy Sewage,
+LHP,Performance,Solids Handling,Up to 50mm,mm
+LHP,Commercial,Typical Price Range,28000-80000,INR
+LHP,Warranty,Warranty Period,2,years
+LAS,Material,Body Material,Cast Iron,
+LAS,Material,Impeller Material,Hardened Cast Iron,
+LAS,Electrical,Frequency,50,Hz
+LAS,Electrical,Phase,Mixed,
+LAS,Performance,Application Type,Large Sewage,
+LAS,Performance,Solids Handling,Up to 80mm,mm
+LAS,Commercial,Typical Price Range,50000-150000,INR
+LAS,Warranty,Warranty Period,2,years
+LBI,Material,Body Material,Cast Iron,
+LBI,Material,Impeller Material,Bronze,
+LBI,Electrical,Frequency,50,Hz
+LBI,Performance,Application Type,General Purpose,
+LBI,Performance,Pump Type,Monoblock Centrifugal,
+LBI,Commercial,Typical Price Range,32000-65000,INR
+LBI,Warranty,Warranty Period,2,years
+LHR,Material,Body Material,Stainless Steel,
+LHR,Material,Impeller Material,Stainless Steel,
+LHR,Electrical,Frequency,50,Hz
+LHR,Electrical,Phase,Three Phase,
+LHR,Performance,Application Type,Pressure Boosting,
+LHR,Performance,Pump Type,Horizontal Multistage,
+LHR,Commercial,Typical Price Range,15000-35000,INR
+LHR,Warranty,Warranty Period,2,years
+MVR,Material,Body Material,Stainless Steel,
+MVR,Material,Impeller Material,Stainless Steel,
+MVR,Electrical,Frequency,50,Hz
+MVR,Performance,Application Type,Pressure Boosting,
+MVR,Performance,Pump Type,Vertical Multistage,
+MVR,Performance,Installation,Vertical Compact,
+MVR,Commercial,Typical Price Range,18000-40000,INR
+MVR,Warranty,Warranty Period,2,years
+LRO,Material,Body Material,Stainless Steel,
+LRO,Material,Impeller Material,Stainless Steel,
+LRO,Electrical,Frequency,50,Hz
+LRO,Performance,Application Type,RO Systems,
+LRO,Performance,Pump Type,Multistage,
+LRO,Commercial,Typical Price Range,12000-30000,INR
+LRO,Warranty,Warranty Period,2,years
+MDH,Material,Body Material,Cast Iron,
+MDH,Material,Impeller Material,Bronze,
+MDH,Electrical,Frequency,50,Hz
+MDH,Performance,Application Type,High Flow,
+MDH,Performance,Pump Type,Monoblock,
+MDH,Commercial,Typical Price Range,40000-100000,INR
+MDH,Warranty,Warranty Period,2,years
+MH,Material,Body Material,Cast Iron,
+MH,Material,Impeller Material,Bronze,
+MH,Electrical,Frequency,50,Hz
+MH,Electrical,Phase,Three Phase,
+MH,Performance,Application Type,High Pressure,
+MH,Performance,Pump Type,Horizontal Multistage,
+MH,Commercial,Typical Price Range,35000-90000,INR
+MH,Warranty,Warranty Period,2,years
+MXF,Material,Body Material,Cast Iron,
+MXF,Material,Impeller Material,Cast Iron,
+MXF,Electrical,Frequency,50,Hz
+MXF,Electrical,Phase,Three Phase,
+MXF,Performance,Application Type,Industrial Transfer,
+MXF,Commercial,Typical Price Range,45000-85000,INR
+MXF,Warranty,Warranty Period,2,years
+FLB,Material,Body Material,Cast Iron,
+FLB,Material,Impeller Material,Bronze,
+FLB,Electrical,Frequency,50,Hz
+FLB,Electrical,Phase,Three Phase,
+FLB,Performance,Application Type,Industrial General,
+FLB,Performance,Pump Type,Monoblock Centrifugal,
+FLB,Commercial,Typical Price Range,28000-120000,INR
+FLB,Warranty,Warranty Period,2,years
+LCS,Material,Body Material,Stainless Steel,
+LCS,Material,Impeller Material,Stainless Steel,
+LCS,Electrical,Frequency,50,Hz
+LCS,Electrical,Phase,Three Phase,
+LCS,Performance,Application Type,High Pressure Industrial,
+LCS,Performance,Pump Type,Vertical Multistage,
+LCS,Commercial,Typical Price Range,55000-180000,INR
+LCS,Warranty,Warranty Period,3,years
+LCR,Material,Body Material,Stainless Steel,
+LCR,Material,Impeller Material,Stainless Steel,
+LCR,Electrical,Frequency,50,Hz
+LCR,Electrical,Phase,Three Phase,
+LCR,Performance,Application Type,High Pressure Industrial,
+LCR,Performance,Pump Type,Vertical Multistage,
+LCR,Commercial,Typical Price Range,35000-250000,INR
+LCR,Warranty,Warranty Period,3,years

@@ -1,15 +1,25 @@
 import requests
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "llama3.2"
 
 def local_generate(prompt: str) -> str:
     payload = {
-        "model": OLLAMA_MODEL,
+        "model": "llama3.2:latest",   # must match `ollama list`
         "prompt": prompt,
-        "stream": False,
+        "stream": False
     }
+
     resp = requests.post(OLLAMA_URL, json=payload, timeout=120)
-    resp.raise_for_status()
+
+    if resp.status_code != 200:
+        return f"LLM error: {resp.status_code}"
+
     data = resp.json()
-    return data.get("response", "")
+
+    # ✅ Correct field for /api/generate
+    text = data.get("response", "").strip()
+
+    if not text:
+        return "Information not available for this pump."
+
+    return text

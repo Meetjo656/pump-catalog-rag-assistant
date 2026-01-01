@@ -1,0 +1,25 @@
+task_id,task_category,frequency,task_description,estimated_time_min,skill_level,parts_required
+MAINT001,Inspection,Daily,Check for unusual noise or vibration during operation. Listen for grinding or rattling sounds. Feel pump body for excessive vibration.,2,User,None
+MAINT002,Inspection,Daily,Observe pump operation - check for water discharge and normal pressure. Verify no leaks from pump body or pipe connections.,3,User,None
+MAINT003,Inspection,Weekly,Inspect all pipe joints and connections for leaks. Check foot valve and strainer condition. Verify suction pipe is not blocked.,5,User,None
+MAINT004,Inspection,Weekly,Check electrical connections for loose terminals. Inspect cable insulation for damage. Verify MCB/ELCB functioning properly.,5,User,None
+MAINT005,Cleaning,Monthly,Clean foot valve and strainer. Remove debris and sediment. Check valve flap movement. Clean pump impeller inlet if accessible.,15,User,Cleaning brush
+MAINT006,Cleaning,Monthly,Clean pump exterior. Remove dust and dirt from motor cooling vents. Wipe down pump casing. Check foundation for cracks.,10,User,Cleaning cloth
+MAINT007,Lubrication,Quarterly,Grease motor bearings through grease nipples (if provided). Use recommended bearing grease. Do not over-grease.,10,User,Bearing grease
+MAINT008,Electrical,Quarterly,Check and tighten all electrical connections. Measure insulation resistance (should be >1 MΩ). Check capacitor condition (single phase pumps).,15,Technician,Multimeter
+MAINT009,Testing,Quarterly,Measure motor current draw under normal load. Compare with nameplate rating. Check voltage at motor terminals.,10,Technician,Clamp meter
+MAINT010,Mechanical,Half-Yearly,Check pump coupling alignment (if external coupling). Inspect shaft seal for leakage. Check impeller clearance.,30,Technician,Feeler gauge
+MAINT011,Mechanical,Half-Yearly,Inspect mechanical seal condition. Check for water leakage from weep hole. Replace seal if continuous dripping.,45,Technician,Mechanical seal kit
+MAINT012,Complete,Yearly,Open pump casing (after draining). Inspect impeller for wear and damage. Check casing for erosion. Clean thoroughly.,60,Technician,Gasket set
+MAINT013,Complete,Yearly,Check bearing condition - listen for noise,check play. Replace if noisy or rough. Re-grease with recommended lubricant.,45,Technician
+MAINT014,Complete,Yearly,Inspect shaft for straightness and surface condition. Check keyway for wear. Verify shaft seal seat condition.,30,Technician,None
+MAINT015,Testing,Yearly,Perform complete performance test. Measure flow rate and pressure. Compare with pump curve. Check efficiency.,40,Technician,Pressure gauge
+MAINT016,Electrical,Yearly,Megger test motor windings (500V). Measure winding resistance. Check for any ground faults. Test capacitor (if single phase).,20,Technician,Megger
+MAINT017,Cleaning,Sewage,Monthly,Clean pump sump area. Remove accumulated solids. Check float switches operation. Clean level sensor probes.,30,User
+MAINT018,Inspection,Sewage,Weekly,Check sewage pump discharge for flow consistency. Inspect for clogging. Verify alarm system functioning.,10,User
+MAINT019,Cleaning,Sewage,Quarterly,Pull up pump and clean impeller. Remove rags and debris. Check wear ring clearance. Clean volute casing.,90,Technician
+MAINT020,Mechanical,Multistage,Yearly,Check all stage impellers for wear. Inspect interstage bushings. Check shaft straightness. Measure stage-wise pressure.,120,Professional
+MAINT021,Mechanical,Multistage,Half-Yearly,Check balance piston clearance. Inspect thrust bearing condition. Verify axial play is within limits.,60,Professional
+MAINT022,Pressure Testing,All,Yearly,Perform pressure test at shutoff head. Check maximum pressure against curve. Verify no pressure fluctuations.,30,Technician
+MAINT023,Vibration,All,Half-Yearly,Measure vibration levels using vibration meter. Check at bearing housings. Compare with baseline readings.,20,Technician
+MAINT024,Temperature,All,Monthly,Measure bearing housing temperature during operation. Should not exceed 70°C. Check motor winding temperature.,5,User

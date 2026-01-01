@@ -1,0 +1,118 @@
+model_id,tag_category,tag_value,tag_weight
+P00001,Series,CSP,10
+P00001,Application,Domestic,9
+P00001,Application,Drainage,10
+P00001,Power Range,1-2 HP,8
+P00001,Power Range,1-1.5 kW,8
+P00001,Phase,Single Phase,10
+P00001,Price Range,Budget,7
+P00001,Feature,Self-Priming,8
+P00001,Use Case,Basement Drainage,9
+P00001,Use Case,Residential,10
+P00002,Series,CSP,10
+P00002,Application,Domestic,9
+P00002,Application,Drainage,10
+P00002,Power Range,1-2 HP,8
+P00002,Power Range,1-1.5 kW,8
+P00002,Phase,Single Phase,10
+P00002,Price Range,Budget,7
+P00002,Feature,Self-Priming,8
+P00002,Use Case,Basement Drainage,9
+P00002,Use Case,Residential,10
+P00003,Series,LAP,10
+P00003,Application,Agricultural,7
+P00003,Application,Industrial,8
+P00003,Application,Drainage,10
+P00003,Power Range,0.5-1 HP,8
+P00003,Power Range,0.5-1 kW,8
+P00003,Phase,Three Phase,10
+P00003,Price Range,Budget,7
+P00003,Feature,Heavy Duty,7
+P00003,Use Case,Farm Drainage,8
+P00003,Use Case,Commercial,7
+P00014,Series,LHP,10
+P00014,Application,Industrial,9
+P00014,Application,Sewage,10
+P00014,Power Range,5-7.5 HP,9
+P00014,Power Range,3-5 kW,9
+P00014,Phase,Three Phase,10
+P00014,Price Range,Mid-Range,8
+P00014,Feature,Heavy Duty,9
+P00014,Feature,Solids Handling,10
+P00014,Use Case,Industrial Sewage,10
+P00014,Use Case,Effluent,9
+P00015,Series,LHP,10
+P00015,Application,Industrial,10
+P00015,Application,Sewage,10
+P00015,Power Range,7.5-10 HP,10
+P00015,Power Range,5-7.5 kW,10
+P00015,Phase,Three Phase,10
+P00015,Price Range,Premium,9
+P00015,Feature,Heavy Duty,10
+P00015,Feature,High Efficiency,9
+P00015,Feature,Solids Handling,10
+P00015,Use Case,Treatment Plants,10
+P00015,Use Case,Industrial Sewage,10
+P00032,Series,LBI,10
+P00032,Application,Domestic,8
+P00032,Application,Agricultural,9
+P00032,Application,Industrial,7
+P00032,Power Range,5-7.5 HP,9
+P00032,Power Range,3-5 kW,9
+P00032,Phase,Single Phase,10
+P00032,Price Range,Mid-Range,8
+P00032,Feature,Monoblock,10
+P00032,Feature,Versatile,8
+P00032,Feature,BEE Star,9
+P00032,Use Case,Irrigation,9
+P00032,Use Case,Pressure Boosting,8
+P00040,Series,LHR,10
+P00040,Application,Domestic,8
+P00040,Application,Industrial,7
+P00040,Power Range,0.5-1 HP,7
+P00040,Power Range,0-0.5 kW,7
+P00040,Phase,Three Phase,10
+P00040,Price Range,Mid-Range,7
+P00040,Feature,Multistage,10
+P00040,Feature,Pressure Boost,10
+P00040,Feature,Compact,8
+P00040,Use Case,Apartment Buildings,9
+P00040,Use Case,RO Systems,8
+P00041,Series,LHR,10
+P00041,Application,Domestic,9
+P00041,Application,Industrial,8
+P00041,Power Range,0.5-1 HP,8
+P00041,Power Range,0.5-1 kW,8
+P00041,Phase,Three Phase,10
+P00041,Price Range,Mid-Range,8
+P00041,Feature,Multistage,10
+P00041,Feature,Pressure Boost,10
+P00041,Feature,BEE 4-Star,10
+P00041,Feature,High Efficiency,9
+P00041,Use Case,Residential Buildings,10
+P00041,Use Case,Consistent Pressure,9
+P00049,Series,MVR,10
+P00049,Application,Domestic,9
+P00049,Application,Commercial,7
+P00049,Power Range,1-2 HP,8
+P00049,Power Range,1-1.5 kW,8
+P00049,Phase,Single Phase,10
+P00049,Price Range,Mid-Range,8
+P00049,Feature,Vertical Multistage,10
+P00049,Feature,Space Saving,9
+P00049,Feature,Pressure Boost,10
+P00049,Use Case,Apartments,10
+P00049,Use Case,Multi-Floor,9
+P00050,Series,MVR,10
+P00050,Application,Domestic,9
+P00050,Application,Industrial,9
+P00050,Power Range,2-3 HP,9
+P00050,Power Range,1-2 kW,9
+P00050,Phase,Single Phase,10
+P00050,Price Range,Premium,9
+P00050,Feature,Vertical Multistage,10
+P00050,Feature,High Pressure,9
+P00050,Feature,CE Certified,8
+P00050,Use Case,High-Rise Buildings,10
+P00050,Use Case,Fire Fighting,9
+P00050,Use Case,HVAC,8

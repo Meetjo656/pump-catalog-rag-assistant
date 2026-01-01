@@ -75,10 +75,15 @@
       font-size: 16px;
       line-height: 1.7;
       color: #374151;
+      white-space: pre-wrap;
     }
 
     .message-content.user {
       font-weight: 500;
+    }
+
+    .message-content.error {
+      color: #b91c1c;
     }
 
     /* Input Area */
@@ -320,10 +325,10 @@
   <!-- Input Area -->
   <div class="input-container">
     <div class="input-wrapper">
-      <textarea 
-        id="input-box" 
-        class="input-box" 
-        rows="1" 
+      <textarea
+        id="input-box"
+        class="input-box"
+        rows="1"
         placeholder="Ask about pump specifications, comparisons, or recommendations..."
       ></textarea>
       <button class="send-button" id="send-btn" onclick="sendMessage()">↑</button>
@@ -346,17 +351,17 @@
       </select>
     </div>
 
-    <div class="panel-field" id="modelA-wrapper" style="display: none;">
+    <div class="panel-field" id="modelA-wrapper">
       <label for="modelA">Pump model</label>
       <select id="modelA"></select>
     </div>
 
-    <div class="panel-field" id="modelB-wrapper" style="display: none;">
+    <div class="panel-field" id="modelB-wrapper" >
       <label for="modelB">Second pump model</label>
       <select id="modelB"></select>
     </div>
 
-    <div class="panel-field" id="application-wrapper" style="display: none;">
+    <div class="panel-field" id="application-wrapper" >
       <label for="application">Application / usage</label>
       <select id="application">
         <option value="">General</option>
@@ -366,7 +371,7 @@
       </select>
     </div>
 
-    <div class="panel-field" id="focus-wrapper" style="display: none;">
+    <div class="panel-field" id="focus-wrapper">
       <label for="focus">Explanation focus</label>
       <select id="focus">
         <option value="">Overall</option>
@@ -377,243 +382,320 @@
       </select>
     </div>
 
-    <button class="apply-btn" id="apply-btn" onclick="applyStructuredQuery()" disabled>Apply Query</button>
+    <button class="apply-btn" id="apply-btn" onclick="applyStructuredQuery()" disabled>
+      Apply Query
+    </button>
   </div>
-
   <script>
-    const API_URL = "http://127.0.0.1:5000/ask";
-    const PUMP_MODELS = [
-      "MDH-36A (C.I.)",
-      "MDL-4SP/TC",
-      "LHP-3B",
-      "MH series",
-      "MHN series",
-      "MCJ-051SP",
-      "SMSJ-071"
-    ];
+  const API_BASE = "http://127.0.0.1:5000";
+  const API_URL = API_BASE + "/ask";
+  const HEALTH_URL = API_BASE + "/health";
+  const MODELS_URL = API_BASE + "/models";
 
-    // Populate dropdowns
-    const modelASel = document.getElementById("modelA");
-    const modelBSel = document.getElementById("modelB");
-    PUMP_MODELS.forEach(m => {
-      modelASel.appendChild(new Option(m, m));
-      modelBSel.appendChild(new Option(m, m));
-    });
+  const modelASel = document.getElementById("modelA");
+  const modelBSel = document.getElementById("modelB");
 
-    // Panel toggle
-    function togglePanel() {
-      document.getElementById("query-panel").classList.toggle("open");
-    }
+  // Map: model_id -> human-readable label
+  const MODEL_LABEL_MAP = {};
 
-    // Open builder with pre-selected intent
-    function openBuilderWithIntent(intent) {
-      const intentSelect = document.getElementById("intent");
-      intentSelect.value = intent;
-      
-      // Trigger change event to show relevant fields
-      const event = new Event('change');
-      intentSelect.dispatchEvent(event);
-      
-      // Open the panel
-      document.getElementById("query-panel").classList.add("open");
-    }
+  // ================================
+  // Load models for dropdowns
+  // ================================
+  (async () => {
+    try {
+      const res = await fetch(MODELS_URL);
+      if (!res.ok) throw new Error("status " + res.status);
 
-    // Intent change
-    document.getElementById("intent").addEventListener("change", (e) => {
-      const intent = e.target.value;
-      const modelAWrap = document.getElementById("modelA-wrapper");
-      const modelBWrap = document.getElementById("modelB-wrapper");
-      const appWrap = document.getElementById("application-wrapper");
-      const focusWrap = document.getElementById("focus-wrapper");
-      const applyBtn = document.getElementById("apply-btn");
+      const data = await res.json();
+      const models = data.models || [];
 
-      modelAWrap.style.display = "none";
-      modelBWrap.style.display = "none";
-      appWrap.style.display = "none";
-      focusWrap.style.display = "none";
-      applyBtn.disabled = !intent;
-
-      if (!intent) return;
-
-      if (intent === "explain_suitability") {
-        modelAWrap.style.display = "block";
-        appWrap.style.display = "block";
-        focusWrap.style.display = "block";
-      } else if (intent === "compare_models") {
-        modelAWrap.style.display = "block";
-        modelBWrap.style.display = "block";
-        appWrap.style.display = "block";
-        focusWrap.style.display = "block";
-      } else if (intent === "installation_guidance" || intent === "view_specs") {
-        modelAWrap.style.display = "block";
-      }
-    });
-
-    // Prevent selecting same model in comparison
-    modelASel.addEventListener("change", () => {
-      const selected = modelASel.value;
-      [...modelBSel.options].forEach(opt => {
-        opt.disabled = (opt.value && opt.value === selected);
-      });
-    });
-
-    // Apply structured query
-    function applyStructuredQuery() {
-      const intent = document.getElementById("intent").value;
-      const modelA = document.getElementById("modelA").value;
-      const modelB = document.getElementById("modelB").value;
-      const application = document.getElementById("application").value;
-      const focus = document.getElementById("focus").value;
-
-      if (!intent) {
-        alert("Please select what you'd like to do");
+      if (!models.length) {
+        console.warn("No models returned from /models");
         return;
       }
 
-      const params = {};
+      modelASel.innerHTML = "";
+      modelBSel.innerHTML = "";
 
-      // Validate required fields
-      if (intent === "explain_suitability" || intent === "installation_guidance" || intent === "view_specs") {
-        if (!modelA) {
-          alert("Please select a pump model");
-          return;
-        }
-        params.modelA = modelA;
-      }
+      models.forEach(m => {
+        MODEL_LABEL_MAP[m.id] = m.label;
 
-      if (intent === "compare_models") {
-        if (!modelA || !modelB) {
-          alert("Please select both pump models");
-          return;
-        }
-        if (modelA === modelB) {
-          alert("Please select two different pump models");
-          return;
-        }
-        params.modelA = modelA;
-        params.modelB = modelB;
-      }
+        modelASel.appendChild(new Option(m.label, m.id));
+        modelBSel.appendChild(new Option(m.label, m.id));
+      });
 
-      if (application) params.application = application;
-      if (focus) params.focus = focus;
+    } catch (e) {
+      console.error("Failed to load models:", e);
+    }
+  })();
 
-      // Send structured query
-      sendStructuredQuery(intent, params);
-      togglePanel();
+  // ================================
+  // UI helpers
+  // ================================
+  function togglePanel() {
+    document.getElementById("query-panel").classList.toggle("open");
+  }
+
+  function openBuilderWithIntent(intent) {
+    const intentSelect = document.getElementById("intent");
+    intentSelect.value = intent;
+    intentSelect.dispatchEvent(new Event("change"));
+
+    if (
+      intent === "compare_models" ||
+      intent === "view_specs" ||
+      intent === "installation_guidance" ||
+      intent === "explain_suitability"
+    ) {
+      setTimeout(() => modelASel.focus(), 50);
     }
 
-    // Send structured query
-    async function sendStructuredQuery(intent, params) {
-      // Hide welcome
-      document.getElementById("welcome").style.display = "none";
+    document.getElementById("query-panel").classList.add("open");
+  }
 
-      // Create user-visible text
-      let userText = "";
-      if (intent === "explain_suitability") {
-        userText = `Explain: ${params.modelA} for ${params.application || 'general'} use`;
-      } else if (intent === "compare_models") {
-        userText = `Compare: ${params.modelA} vs ${params.modelB}`;
-      } else if (intent === "installation_guidance") {
-        userText = `Installation guide: ${params.modelA}`;
-      } else if (intent === "view_specs") {
-        userText = `Specifications: ${params.modelA}`;
-      }
+  // ================================
+  // Intent UI logic
+  // ================================
+  document.getElementById("intent").addEventListener("change", (e) => {
+    const intent = e.target.value;
 
-      // Add user message
-      addMessage(userText, true);
+    const modelAWrap = document.getElementById("modelA-wrapper");
+    const modelBWrap = document.getElementById("modelB-wrapper");
+    const appWrap = document.getElementById("application-wrapper");
+    const focusWrap = document.getElementById("focus-wrapper");
+    const applyBtn = document.getElementById("apply-btn");
 
-      // Add loading message
-      const loadingDiv = addMessage("Processing your request...", false);
-      loadingDiv.classList.add("loading");
+    modelAWrap.style.display = "none";
+    modelBWrap.style.display = "none";
+    appWrap.style.display = "none";
+    focusWrap.style.display = "none";
+    applyBtn.disabled = !intent;
 
-      document.getElementById("send-btn").disabled = true;
+    if (!intent) return;
 
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ intent, params })
-        });
-
-        const data = await res.json();
-        loadingDiv.remove();
-        addMessage(data.answer || data.error || "No response", false);
-      } catch (err) {
-        loadingDiv.remove();
-        addMessage("Error: " + err.message, false);
-      }
-
-      document.getElementById("send-btn").disabled = false;
+    if (intent === "explain_suitability") {
+      modelAWrap.style.display = "block";
+      appWrap.style.display = "block";
+      focusWrap.style.display = "block";
+    } else if (intent === "compare_models") {
+      modelAWrap.style.display = "block";
+      modelBWrap.style.display = "block";
+      appWrap.style.display = "block";
+      focusWrap.style.display = "block";
+    } else if (intent === "installation_guidance" || intent === "view_specs") {
+      modelAWrap.style.display = "block";
     }
+  });
 
-    // Send message
-    async function sendMessage() {
-      const inputBox = document.getElementById("input-box");
-      const text = inputBox.value.trim();
-      if (!text) return;
-
-      // Hide welcome
-      document.getElementById("welcome").style.display = "none";
-
-      // Add user message
-      addMessage(text, true);
-      inputBox.value = "";
-      inputBox.style.height = "auto";
-
-      // Add loading message
-      const loadingDiv = addMessage("Thinking...", false);
-      loadingDiv.classList.add("loading");
-
-      document.getElementById("send-btn").disabled = true;
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question: text })
-        });
-
-        const data = await res.json();
-        loadingDiv.remove();
-        addMessage(data.answer || data.error || "No response", false);
-      } catch (err) {
-        loadingDiv.remove();
-        addMessage("Error: " + err.message, false);
-      }
-
-      document.getElementById("send-btn").disabled = false;
-    }
-
-    // Add message to chat
-    function addMessage(text, isUser) {
-      const wrapper = document.createElement("div");
-      wrapper.className = `message-wrapper ${isUser ? 'user' : 'bot'}`;
-      
-      const content = document.createElement("div");
-      content.className = `message-content ${isUser ? 'user' : 'bot'}`;
-      content.textContent = text;
-      
-      wrapper.appendChild(content);
-      document.getElementById("chat-container").appendChild(wrapper);
-      
-      wrapper.scrollIntoView({ behavior: "smooth", block: "end" });
-      
-      return content;
-    }
-
-    // Auto-resize textarea
-    document.getElementById("input-box").addEventListener("input", function() {
-      this.style.height = "auto";
-      this.style.height = Math.min(this.scrollHeight, 200) + "px";
+  // Prevent selecting same model twice
+  modelASel.addEventListener("change", () => {
+    const selected = modelASel.value;
+    [...modelBSel.options].forEach(opt => {
+      opt.disabled = opt.value && opt.value === selected;
     });
+  });
 
-    // Enter to send
-    document.getElementById("input-box").addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+  // ================================
+  // Structured query submit
+  // ================================
+  function applyStructuredQuery() {
+    const intent = document.getElementById("intent").value;
+    const modelA = modelASel.value;
+    const modelB = modelBSel.value;
+    const application = document.getElementById("application").value;
+    const focus = document.getElementById("focus").value;
+
+    if (!intent) {
+      alert("Please select what you'd like to do");
+      return;
+    }
+
+    const params = {};
+
+    if (["explain_suitability", "installation_guidance", "view_specs"].includes(intent)) {
+      if (!modelA) {
+        alert("Please select a pump model");
+        return;
       }
-    });
-  </script>
-</body>
+      params.modelA = modelA;
+    }
+
+    if (intent === "compare_models") {
+      if (!modelA || !modelB || modelA === modelB) {
+        alert("Please select two different pump models");
+        return;
+      }
+      params.modelA = modelA;
+      params.modelB = modelB;
+    }
+
+    if (application) params.application = application;
+    if (focus) params.focus = focus;
+
+    sendStructuredQuery(intent, params);
+    togglePanel();
+  }
+
+  // ================================
+  // Send structured query
+  // ================================
+  async function sendStructuredQuery(intent, params) {
+    hideWelcome();
+
+    let userText = "";
+
+    if (intent === "explain_suitability") {
+      userText = `Explain: ${
+        MODEL_LABEL_MAP[params.modelA] || params.modelA
+      } for ${params.application || "general"} use`;
+    }
+    else if (intent === "compare_models") {
+      userText = `Compare: ${
+        MODEL_LABEL_MAP[params.modelA] || params.modelA
+      } vs ${
+        MODEL_LABEL_MAP[params.modelB] || params.modelB
+      }`;
+    }
+    else if (intent === "installation_guidance") {
+      userText = `Installation guide: ${
+        MODEL_LABEL_MAP[params.modelA] || params.modelA
+      }`;
+    }
+    else if (intent === "view_specs") {
+      userText = `Specifications: ${
+        MODEL_LABEL_MAP[params.modelA] || params.modelA
+      }`;
+    }
+
+    addMessage(userText, true);
+
+    const loadingDiv = addMessage("Processing your request...", false, true);
+    setSendDisabled(true);
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ intent, params }),
+      });
+
+      const data = await res.json();
+      loadingDiv.remove();
+
+      const reply = extractAnswer(data);
+      addMessage(reply, false);
+
+    } catch (err) {
+      loadingDiv.remove();
+      addMessage("Error calling backend: " + err.message, false, true);
+    }
+
+    setSendDisabled(false);
+  }
+
+  // ================================
+  // Free text chat
+  // ================================
+  async function sendMessage() {
+    const inputBox = document.getElementById("input-box");
+    const text = inputBox.value.trim();
+    if (!text) return;
+
+    hideWelcome();
+    addMessage(text, true);
+    inputBox.value = "";
+    inputBox.style.height = "auto";
+
+    const loadingDiv = addMessage("Thinking...", false, true);
+    setSendDisabled(true);
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: text }),
+      });
+
+      const data = await res.json();
+      loadingDiv.remove();
+
+      const reply = extractAnswer(data);
+      addMessage(reply, false);
+
+    } catch (err) {
+      loadingDiv.remove();
+      addMessage("Error calling backend: " + err.message, false, true);
+    }
+
+    setSendDisabled(false);
+  }
+
+  // ================================
+  // Utilities
+  // ================================
+  function extractAnswer(data) {
+    if (!data) return "No response from backend.";
+    if (data.answer) {
+      if (typeof data.answer === "object" && data.answer.answer) {
+        return data.answer.answer;
+      }
+      return data.answer;
+    }
+    if (data.error) return "Backend error: " + data.error;
+    return "No answer field in backend response.";
+  }
+
+  function addMessage(text, isUser, isLoading = false) {
+    const wrapper = document.createElement("div");
+    wrapper.className = `message-wrapper ${isUser ? "user" : "bot"}`;
+
+    const content = document.createElement("div");
+    content.className = `message-content ${isUser ? "user" : isLoading ? "loading" : "bot"}`;
+    content.textContent = text;
+
+    wrapper.appendChild(content);
+    document.getElementById("chat-container").appendChild(wrapper);
+    wrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+
+    return wrapper;
+  }
+
+  function hideWelcome() {
+    const w = document.getElementById("welcome");
+    if (w) w.style.display = "none";
+  }
+
+  function setSendDisabled(disabled) {
+    document.getElementById("send-btn").disabled = disabled;
+  }
+
+  document.getElementById("input-box").addEventListener("input", function () {
+    this.style.height = "auto";
+    this.style.height = Math.min(this.scrollHeight, 200) + "px";
+  });
+
+  document.getElementById("input-box").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Health check
+  (async () => {
+    try {
+      const res = await fetch(HEALTH_URL);
+      if (!res.ok) throw new Error("status " + res.status);
+      console.log("Backend health OK");
+    } catch (e) {
+      addMessage(
+        "Warning: backend may be down. Start python backend/app.py.",
+        false,
+        true
+      );
+    }
+  })();
+</script>
+
+  </body>
 </html>

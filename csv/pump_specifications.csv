@@ -1,0 +1,114 @@
+model_id,spec_category,spec_name,spec_value,spec_value_num,unit,spec_order
+P00001,Power,HP Equivalent,1.5,1.5,HP,1
+P00001,Power,Rated Power,1.1,1.1,kW,2
+P00001,Electrical,Phase,Single Phase,1,,3
+P00001,Electrical,Voltage,220-240,230,V,4
+P00001,Electrical,Frequency,50,50,Hz,5
+P00001,Performance,Rated Speed,2875,2875,RPM,6
+P00001,Efficiency,Motor Efficiency,79.6,79.6,%,7
+P00001,Efficiency,Power Factor,0.84,0.84,,8
+P00001,Physical,Weight,21,21,kg,9
+P00001,Commercial,Price Min,12000,12000,INR,10
+P00001,Commercial,Price Max,16000,16000,INR,11
+P00002,Power,HP Equivalent,1.5,1.5,HP,1
+P00002,Power,Rated Power,1.1,1.1,kW,2
+P00002,Electrical,Phase,Single Phase,1,,3
+P00002,Electrical,Voltage,220-240,230,V,4
+P00002,Electrical,Frequency,50,50,Hz,5
+P00002,Performance,Rated Speed,2875,2875,RPM,6
+P00002,Efficiency,Motor Efficiency,79.6,79.6,%,7
+P00002,Efficiency,Power Factor,0.84,0.84,,8
+P00002,Physical,Weight,21,21,kg,9
+P00002,Commercial,Price Min,12000,12000,INR,10
+P00002,Commercial,Price Max,16000,16000,INR,11
+P00003,Power,HP Equivalent,1,1,HP,1
+P00003,Power,Rated Power,0.75,0.75,kW,2
+P00003,Electrical,Phase,Three Phase,3,,3
+P00003,Electrical,Voltage,380-415,400,V,4
+P00003,Electrical,Frequency,50,50,Hz,5
+P00003,Performance,Rated Speed,2875,2875,RPM,6
+P00003,Efficiency,Motor Efficiency,77.4,77.4,%,7
+P00003,Efficiency,Power Factor,0.83,0.83,,8
+P00003,Physical,Weight,20,20,kg,9
+00003,Commercial,Price Min,10000,10000,INR,10
+P00003,Commercial,Price Max,14000,14000,INR,11
+P00004,Power,HP Equivalent,1,1,HP,1
+P00004,Power,Rated Power,0.75,0.75,kW,2
+P00004,Electrical,Phase,Single Phase,1,,3
+P00004,Electrical,Voltage,220-240,230,V,4
+P00004,Electrical,Frequency,50,50,Hz,5
+P00004,Performance,Rated Speed,2875,2875,RPM,6
+P00004,Efficiency,Motor Efficiency,77.4,77.4,%,7
+P00004,Efficiency,Power Factor,0.83,0.83,,8
+P00004,Physical,Weight,20,20,kg,9
+P00004,Commercial,Price Min,10000,10000,INR,10
+P00004,Commercial,Price Max,13500,13500,INR,11
+P00005,Power,HP Equivalent,1.5,1.5,HP,1
+P00005,Power,Rated Power,1.1,1.1,kW,2
+P00005,Electrical,Phase,Three Phase,3,,3
+P00005,Electrical,Voltage,380-415,400,V,4
+P00005,Electrical,Frequency,50,50,Hz,5
+P00005,Performance,Rated Speed,2875,2875,RPM,6
+P00005,Efficiency,Motor Efficiency,79.6,79.6,%,7
+P00005,Efficiency,Power Factor,0.84,0.84,,8
+P00005,Physical,Weight,21,21,kg,9
+P00005,Commercial,Price Min,13000,13000,INR,10
+P00005,Commercial,Price Max,17000,17000,INR,11
+P00014,Power,HP Equivalent,5,5,HP,1
+P00014,Power,Rated Power,3.7,3.7,kW,2
+P00014,Electrical,Phase,Three Phase,3,,3
+P00014,Electrical,Voltage,380-415,400,V,4
+P00014,Electrical,Frequency,50,50,Hz,5
+P00014,Performance,Rated Speed,2914,2914,RPM,6
+P00014,Efficiency,Motor Efficiency,85.5,85.5,%,7
+P00014,Efficiency,Power Factor,0.88,0.88,,8
+P00014,Physical,Weight,62,62,kg,9
+P00014,Material,Frame Size,100L,,,10
+P00014,Commercial,Price Min,28000,28000,INR,11
+P00014,Commercial,Price Max,35000,35000,INR,12
+P00015,Power,HP Equivalent,7.5,7.5,HP,1
+P00015,Power,Rated Power,5.5,5.5,kW,2
+P00015,Electrical,Phase,Three Phase,3,,3
+P00015,Electrical,Voltage,380-415,400,V,4
+P00015,Electrical,Frequency,50,50,Hz,5
+P00015,Performance,Rated Speed,2937,2937,RPM,6
+P00015,Efficiency,Motor Efficiency,87,87,%,7
+P00015,Efficiency,Power Factor,0.86,0.86,,8
+P00015,Physical,Weight,93,93,kg,9
+P00015,Material,Frame Size,132S,,,10
+P00015,Commercial,Price Min,42000,42000,INR,11
+P00015,Commercial,Price Max,52000,52000,INR,12
+P00032,Power,HP Equivalent,5,5,HP,1
+P00032,Power,Rated Power,3.7,3.7,kW,2
+P00032,Electrical,Phase,Single Phase,1,,3
+P00032,Electrical,Voltage,220-240,230,V,4
+P00032,Electrical,Frequency,50,50,Hz,5
+P00032,Performance,Rated Speed,2914,2914,RPM,6
+P00032,Efficiency,Motor Efficiency,85.5,85.5,%,7
+P00032,Efficiency,Power Factor,0.88,0.88,,8
+P00032,Physical,Weight,62,62,kg,9
+P00032,Material,Frame Size,100L,,,10
+P00032,Commercial,Price Min,32000,32000,INR,11
+P00032,Commercial,Price Max,42000,42000,INR,12
+P00040,Power,HP Equivalent,0.5,0.5,HP,1
+P00040,Power,Rated Power,0.37,0.37,kW,2
+P00040,Electrical,Phase,Three Phase,3,,3
+P00040,Electrical,Voltage,380-415,400,V,4
+P00040,Electrical,Frequency,50,50,Hz,5
+P00040,Performance,Rated Speed,2800,2800,RPM,6
+P00040,Efficiency,Motor Efficiency,75,75,%,7
+P00040,Efficiency,Power Factor,0.82,0.82,,8
+P00040,Physical,Weight,18,18,kg,9
+P00040,Commercial,Price Min,15000,15000,INR,10
+P00040,Commercial,Price Max,20000,20000,INR,11
+P00041,Power,HP Equivalent,0.75,0.75,HP,1
+P00041,Power,Rated Power,0.55,0.55,kW,2
+P00041,Electrical,Phase,Three Phase,3,,3
+P00041,Electrical,Voltage,380-415,400,V,4
+P00041,Electrical,Frequency,50,50,Hz,5
+P00041,Performance,Rated Speed,2800,2800,RPM,6
+P00041,Efficiency,Motor Efficiency,76,76,%,7
+P00041,Efficiency,Power Factor,0.82,0.82,,8
+P00041,Physical,Weight,19,19,kg,9
+P00041,Commercial,Price Min,16000,16000,INR,10
+P00041,Commercial,Price Max,21000,21000,INR,11
