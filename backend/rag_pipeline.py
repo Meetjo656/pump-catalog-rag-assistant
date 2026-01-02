@@ -1,106 +1,107 @@
-from pump_master import get_model_id_by_name, get_model_name_by_id
-from retriever import retrieve_top_k
-from generation import build_prompt
+# backend/rag_pipeline.py
+
+from retriever import retrieve_all_for_model, retrieve_top_k
+from generation import build_prompt, generate_answer
+from pump_master import resolve_model_identifier
 
 
+def _run(question: str, chunks):
+    prompt = build_prompt(question, chunks)
+    return generate_answer(prompt)
 
-# =========================================================
-# Shared helper
-# =========================================================
 
-def _run_rag(question, model_id=None, chunk_type=None, k=6):
-    chunks = retrieve_top_k(
-        query=question,
-        k=k,
-        model_filter=model_id,
-        chunk_type=chunk_type,
+def _resolve_model(p: dict, *keys: str) -> str | None:
+    """
+    Accepts multiple possible param keys and resolves either model_id or model_name
+    to the canonical model_id (Pxxxxx).
+    """
+    for k in keys:
+        v = p.get(k)
+        if not v:
+            continue
+        mid = resolve_model_identifier(v)
+        if mid:
+            return mid
+    return None
+
+
+def rag_view_specs(p):
+    # accept: model_id / model_name / modelA
+    mid = _resolve_model(p, "model_id", "model_name", "modelA")
+    if not mid:
+        return "Information not available."
+
+    chunks = retrieve_all_for_model(mid, chunk_type="specifications")
+    return _run(
+        f"List ALL technical specifications of MODEL {mid}. Include every item from the context; do not summarize.",
+        chunks,
     )
 
-    if not chunks:
-        return {"answer": "Information not available for this pump."}
 
-    prompt = build_prompt(question, chunks)
-    return {"answer": prompt}
+def rag_explain_suitability(p):
+    # accept: model_id / model_name / modelA
+    mid = _resolve_model(p, "model_id", "model_name", "modelA")
+    app = p.get("application", "domestic")
+    if not mid:
+        return "Information not available."
 
-
-# =========================================================
-# RAG handlers (MATCH app.py imports)
-# =========================================================
-
-def rag_view_specs(params: dict):
-    # ---- Validate input
-    model_name = (params.get("modelA") or "").strip()
-    if not model_name:
-        raise ValueError("modelA is required for view_specs")
-
-    # ---- Resolve name → ID (NON-NEGOTIABLE)
-    model_id = get_model_id_by_name(model_name)
-
-    # ---- Build query (human-readable)
-    question = f"List the technical specifications of the {model_name} pump."
-
-    # ---- STRICT retrieval (ID ONLY)
-    chunks = retrieve_top_k(
-        query=question,
-        k=1,  # exactly one consolidated chunk
-        model_filter=model_id,
-        chunk_type="specifications",
+    chunks = (
+        retrieve_all_for_model(mid, chunk_type="features")
+        + retrieve_all_for_model(mid, chunk_type="specifications")
     )
 
-    # ---- No data guard
-    if not chunks:
-        return {
-            "intent": "view_specs",
-            "model": model_name,
-            "answer": "Information not available for this pump.",
-        }
-
-    # ---- Build grounded response
-    prompt = build_prompt(question, chunks)
-
-    return {
-        "intent": "view_specs",
-        "model": model_name,
-        "answer": prompt,
-    }
+    question = (
+        f"Explain suitability of MODEL {mid} for {app}.\n"
+        "Use ONLY the context.\n"
+        "Include:\n"
+        "- Suitability score and 'Recommended' value if present.\n"
+        "- Key reasons from applications.\n"
+        "- Advantages/limitations from features.\n"
+        "- A short final recommendation."
+    )
+    return _run(question, chunks)
 
 
-def rag_compare_models(params: dict):
-    m1 = params.get("modelA", "")
-    m2 = params.get("modelB", "")
+def rag_compare_models(p):
+    # accept for A: modelA OR modelA_id/modelA_name OR model_id/model_name
+    m1 = _resolve_model(p, "modelA_id", "modelA_name", "modelA", "model_id", "model_name")
+    # accept for B: modelB OR modelB_id/modelB_name
+    m2 = _resolve_model(p, "modelB_id", "modelB_name", "modelB")
 
-    id1 = get_model_id_by_name(m1)
-    id2 = get_model_id_by_name(m2)
+    if not m1 or not m2 or m1 == m2:
+        return "Information not available."
 
-    if not id1 or not id2:
-        return {"answer": "One or both pump models not found."}
+    chunks = (
+        retrieve_all_for_model(m1, "specifications")
+        + retrieve_all_for_model(m1, "features")
+        + retrieve_all_for_model(m2, "specifications")
+        + retrieve_all_for_model(m2, "features")
+    )
 
-    question = f"Compare pump {m1} and pump {m2}."
-    return _run_rag(question, model_id=None, chunk_type="specifications", k=10)
-
-
-def rag_explain_suitability(params: dict):
-    model_name = params.get("modelA", "")
-    application = params.get("application", "general use")
-
-    model_id = get_model_id_by_name(model_name)
-    if not model_id:
-        return {"answer": f"Pump {model_name} not found."}
-
-    question = f"Explain why pump {model_name} is suitable for {application}."
-    return _run_rag(question, model_id=model_id)
+    question = (
+        f"Compare MODEL {m1} vs MODEL {m2}. "
+        "Use specs and features from context. Provide differences and a recommendation by application "
+        "(domestic/agricultural/industrial)."
+    )
+    return _run(question, chunks)
 
 
-def rag_installation_guidance(params: dict):
-    model_name = params.get("modelA", "")
-    model_id = get_model_id_by_name(model_name)
+def rag_installation_guidance(p):
+    # accept: model_id / model_name / modelA
+    mid = _resolve_model(p, "model_id", "model_name", "modelA")
+    if not mid:
+        return "Information not available."
 
-    if not model_id:
-        return {"answer": f"Pump {model_name} not found."}
+    chunks = retrieve_all_for_model(mid, chunk_type="installation")
+    question = (
+        f"Provide installation guidance for MODEL {mid}.\n"
+        "Use ONLY the context.\n"
+        "Output as ordered steps.\n"
+        "Include safety warnings where present."
+    )
+    return _run(question, chunks)
 
-    question = f"Provide installation and maintenance guidance for pump {model_name}."
-    return _run_rag(question, model_id=model_id)
 
-
-def rag_free_text(question: str):
-    return _run_rag(question)
+def rag_free_text(q: str):
+    chunks = retrieve_top_k(q, model_filter=None, chunk_type=None, k=10)
+    return _run(q, chunks)

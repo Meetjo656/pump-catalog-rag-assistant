@@ -1,14 +1,14 @@
 import os
 import pickle
-import numpy as np
+from typing import Any, Dict, List, Optional
+
 import faiss
+import numpy as np
+from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-from dotenv import load_dotenv
 
-# =========================================================
-# Environment & paths
-# =========================================================
+from pump_master import resolve_model_identifier
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -16,154 +16,140 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 VECTOR_DIR = os.path.join(BASE_DIR, "vector_store")
 INDEX_PATH = os.path.join(VECTOR_DIR, "pump_index.faiss")
 DOCS_PATH = os.path.join(VECTOR_DIR, "pump_documents.pkl")
-METADATA_PATH = os.path.join(VECTOR_DIR, "pump_metadata.pkl")
+META_PATH = os.path.join(VECTOR_DIR, "pump_metadata.pkl")
 
 EMBED_MODEL = "text-embedding-004"
 
-api_key = os.getenv("GEMINI_API_KEY")
-if not api_key:
-    raise RuntimeError("GEMINI_API_KEY missing")
-
-client = genai.Client(api_key=api_key)
-
-
-# =========================================================
-# Helpers
-# =========================================================
-
-def normalize_model(name: str | None) -> str:
-    """
-    Normalize model identifiers so UI, CSV, and metadata match.
-    """
-    if not name:
-        return ""
-    return (
-        str(name)
-        .lower()
-        .replace("(c.i.)", "")
-        .replace("(", "")
-        .replace(")", "")
-        .replace("-", "")
-        .replace(" ", "")
-        .strip()
-    )
+_client: Optional[genai.Client] = None
+_index = None
+_docs: Optional[List[str]] = None
+_meta: Optional[List[Dict[str, Any]]] = None
 
 
-# =========================================================
-# Core Retrieval
-# =========================================================
+def _get_client() -> genai.Client:
+    global _client
+    if _client is None:
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise RuntimeError("GEMINI_API_KEY not found in .env")
+        _client = genai.Client(api_key=api_key)
+    return _client
+
+
+def _load_store() -> None:
+    global _index, _docs, _meta
+
+    if _index is not None and _docs is not None and _meta is not None:
+        return
+
+    if not os.path.exists(INDEX_PATH):
+        raise FileNotFoundError(f"FAISS index not found: {INDEX_PATH} (run ingest_pump_specifications.py)")
+
+    if not os.path.exists(DOCS_PATH) or not os.path.exists(META_PATH):
+        raise FileNotFoundError(f"Documents/metadata not found in {VECTOR_DIR} (run ingest_pump_specifications.py)")
+
+    _index = faiss.read_index(INDEX_PATH)
+
+    with open(DOCS_PATH, "rb") as f:
+        _docs = pickle.load(f)
+
+    with open(META_PATH, "rb") as f:
+        _meta = pickle.load(f)
+
 
 def retrieve_top_k(
     query: str,
     k: int = 5,
-    model_filter: str | None = None,
-    chunk_type: str | None = None,
-) -> list[dict]:
+    model_filter: Optional[str] = None,
+    chunk_type: Optional[str] = None,
+) -> List[Dict[str, Any]]:
     """
-    Semantic retrieval with strict metadata filtering.
+    Returns list of chunks:
+      { "text": str, "model": str, "chunk_type": str, "category": str, "source": str }
     """
+    if not isinstance(query, str) or not query.strip():
+        return []
 
-    # ---- Load vector store
-    index = faiss.read_index(INDEX_PATH)
+    _load_store()
+    client = _get_client()
 
-    with open(DOCS_PATH, "rb") as f:
-        documents = pickle.load(f)
+    resolved = resolve_model_identifier(model_filter) if model_filter else None
 
-    with open(METADATA_PATH, "rb") as f:
-        metadata = pickle.load(f)
-
-    # ---- Embed query
-    embed_result = client.models.embed_content(
+    emb = client.models.embed_content(
         model=EMBED_MODEL,
         contents=[query],
         config=types.EmbedContentConfig(task_type="RETRIEVAL_QUERY"),
     )
 
-    q_embedding = np.array(
-        [embed_result.embeddings[0].values],
-        dtype="float32",
-    )
+    q = np.array([emb.embeddings[0].values], dtype="float32")
+    D, I = _index.search(q, max(k * 6, k))
 
-    # ---- Search (over-fetch then filter)
-    distances, indices = index.search(q_embedding, k * 3)
+    out: List[Dict[str, Any]] = []
 
-    results = []
-    target_norm = normalize_model(model_filter) if model_filter else ""
-
-    for i, idx in enumerate(indices[0]):
-        if idx == -1:
+    for idx in I[0]:
+        if idx < 0:
+            continue
+        if idx >= len(_docs):
             continue
 
-        meta = metadata[idx]
-        doc = documents[idx]
+        m = _meta[idx] or {}
+        m_model = m.get("model")
 
-        # ---- Model filter
-        if target_norm:
-            if normalize_model(meta.get("model")) != target_norm:
-                continue
-
-        # ---- Chunk type filter
-        if chunk_type and meta.get("chunk_type") != chunk_type:
+        if resolved and m_model not in (resolved, "ALL"):
             continue
 
-        results.append({
-            "rank": len(results) + 1,
-            "text": doc,
-            "distance": float(distances[0][i]),
-            "model": meta.get("model", "ALL"),
-            "chunk_type": meta.get("chunk_type", "general"),
-            "source": meta.get("source", "unknown"),
-            "category": meta.get("category", "general"),
-        })
+        if chunk_type and m.get("chunk_type") != chunk_type:
+            continue
 
-        if len(results) >= k:
-            break
-
-    return results
-
-
-# =========================================================
-# Prompt Builder
-# =========================================================
-
-def build_prompt(user_query: str, chunks: list[dict]) -> str:
-    """
-    Clean, model-strict RAG prompt.
-    Forces structured technical output.
-    """
-
-    if not chunks:
-        return (
-            "No technical specifications were found for this pump model "
-            "in the knowledge base."
+        out.append(
+            {
+                "text": _docs[idx],
+                "model": m_model,
+                "chunk_type": m.get("chunk_type"),
+                "category": m.get("category"),
+                "source": m.get("source"),
+            }
         )
 
-    # 🔒 Assume chunks are already filtered by model_id
-    model_id = chunks[0]["model"]
+        if len(out) >= k:
+            break
 
-    # Merge all retrieved text (usually 1 chunk after fix)
-    context = "\n".join(c["text"] for c in chunks)
+    return out
+def retrieve_all_for_model(
+    model_filter: str,
+    chunk_type: str | None = None,
+) -> list[dict]:
+    """
+    Deterministic retrieval (no embeddings):
+    returns ALL chunks for a model (+ 'ALL' shared chunks).
+    """
+    _load_store()
 
-    return f"""You are a pump engineering expert.
+    resolved = resolve_model_identifier(model_filter)
+    if not resolved:
+        return []
 
-Use ONLY the information provided below.
-DO NOT infer, guess, or add specifications that are not present.
+    out = []
+    for i, m in enumerate(_meta):
+        if not m:
+            continue
+        if chunk_type and m.get("chunk_type") != chunk_type:
+            continue
 
-PUMP MODEL ID:
-{model_id}
+        mm = m.get("model")
+        if mm not in (resolved, "ALL"):
+            continue
 
-TECHNICAL SPECIFICATION DATA:
-{context}
+        out.append(
+            {
+                "text": _docs[i],
+                "model": mm,
+                "chunk_type": m.get("chunk_type"),
+                "category": m.get("category"),
+                "source": m.get("source"),
+            }
+        )
 
-USER QUESTION:
-{user_query}
-
-INSTRUCTIONS FOR ANSWER:
-- List specifications as clear bullet points
-- Include units exactly as stated
-- Do NOT mention other pump models
-- Do NOT repeat the question
-- Do NOT say "general specifications"
-
-FINAL ANSWER:"""
-
+    # keep a stable order (category then source)
+    out.sort(key=lambda x: (str(x.get("category") or ""), str(x.get("source") or ""), str(x.get("model") or "")))
+    return out

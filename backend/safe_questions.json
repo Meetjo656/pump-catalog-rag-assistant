@@ -1,0 +1,143 @@
+{
+  "version": "1.0",
+  "description": "Allowed question templates for Pump RAG UI. These templates are guaranteed to map correctly to backend intents and model_id resolution.",
+  "rules": {
+    "model_resolution": "User-visible pump names MUST be resolved to internal model_id before querying RAG.",
+    "no_free_form": true,
+    "no_multi_intent": true,
+    "strict_templates_only": true
+  },
+  "intents": [
+    {
+      "intent": "view_specs",
+      "label": "View Specifications",
+      "description": "Get technical specifications of a pump",
+      "template": "Specifications: {MODEL_NAME}",
+      "params": {
+        "modelA": {
+          "type": "pump_model",
+          "required": true
+        }
+      },
+      "examples": [
+        "Specifications: CSP-521-T",
+        "Specifications: LAP-4315",
+        "Specifications: LFP-2115U"
+      ]
+    },
+    {
+      "intent": "explain_suitability",
+      "label": "Explain Suitability",
+      "description": "Explain why a pump is suitable for a specific application",
+      "template": "Explain: {MODEL_NAME} for {APPLICATION}",
+      "params": {
+        "modelA": {
+          "type": "pump_model",
+          "required": true
+        },
+        "application": {
+          "type": "enum",
+          "allowed_values": [
+            "general use",
+            "residential drainage",
+            "domestic water transfer",
+            "sewage applications",
+            "industrial use",
+            "agricultural use",
+            "pressure boosting"
+          ],
+          "required": true
+        }
+      },
+      "examples": [
+        "Explain: CSP-521-T for residential drainage",
+        "Explain: LFP-2115U for sewage applications",
+        "Explain: LBI-101 for industrial use"
+      ]
+    },
+    {
+      "intent": "compare_models",
+      "label": "Compare Pumps",
+      "description": "Compare two pump models based on available features",
+      "template": "Compare: {MODEL_NAME_A} vs {MODEL_NAME_B}",
+      "params": {
+        "modelA": {
+          "type": "pump_model",
+          "required": true
+        },
+        "modelB": {
+          "type": "pump_model",
+          "required": true,
+          "not_equal_to": "modelA"
+        }
+      },
+      "examples": [
+        "Compare: CSP-521-T vs LAP-4315",
+        "Compare: LFP-2115U vs LFP-2135U",
+        "Compare: LBI-101 vs LBI-103"
+      ]
+    },
+    {
+      "intent": "installation_guidance",
+      "label": "Installation Guide",
+      "description": "Get installation instructions for a pump",
+      "template": "Installation guide: {MODEL_NAME}",
+      "params": {
+        "modelA": {
+          "type": "pump_model",
+          "required": true
+        }
+      },
+      "examples": [
+        "Installation guide: CSP-521-T",
+        "Installation guide: LAP-3335",
+        "Installation guide: LFP-2115U"
+      ]
+    },
+    {
+      "intent": "maintenance_guidance",
+      "label": "Maintenance Guide",
+      "description": "Get maintenance instructions for a pump",
+      "template": "Maintenance guide: {MODEL_NAME}",
+      "params": {
+        "modelA": {
+          "type": "pump_model",
+          "required": true
+        }
+      },
+      "examples": [
+        "Maintenance guide: CSP-521-T",
+        "Maintenance guide: LHP-106035"
+      ]
+    },
+    {
+      "intent": "troubleshooting",
+      "label": "Troubleshooting",
+      "description": "Get troubleshooting steps for a pump issue",
+      "template": "Troubleshooting: {MODEL_NAME} {ISSUE}",
+      "params": {
+        "modelA": {
+          "type": "pump_model",
+          "required": true
+        },
+        "issue": {
+          "type": "enum",
+          "allowed_values": [
+            "not starting",
+            "low flow",
+            "overheating",
+            "excessive vibration",
+            "noise",
+            "frequent tripping"
+          ],
+          "required": true
+        }
+      },
+      "examples": [
+        "Troubleshooting: CSP-521-T not starting",
+        "Troubleshooting: LAP-4315 overheating",
+        "Troubleshooting: LFP-2115U low flow"
+      ]
+    }
+  ]
+}

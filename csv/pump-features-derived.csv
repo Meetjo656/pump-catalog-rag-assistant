@@ -1,71 +1,71 @@
-"model_id,feature_category,feature_name,feature_value,display_order"
-"P00001,Advantage,Single Phase Operation,Easy installation in residential areas with standard power supply,1"
-"P00001,Advantage,Moderate Power Consumption,1.5 HP (1.1 kW) suitable for daily household drainage tasks,2"
-"P00001,Advantage,Good Motor Efficiency,79.6% motor efficiency reduces electricity costs,3"
-"P00001,Limitation,Limited Head,Suitable only for low to medium head drainage applications,1"
-"P00001,Use Case,Best For,Residential basement dewatering and sump drainage,1"
-"P00001,Use Case,Not Recommended For,Continuous industrial drainage or high-head applications,2"
-"P00002,Advantage,Reliable Drainage,CSP series proven track record for residential drainage,1"
-"P00002,Advantage,Easy Maintenance,Simple design with accessible components,2"
-"P00002,Advantage,Cost Effective,Budget-friendly option for home drainage needs,3"
-"P00002,Limitation,Flow Rate,Limited to intermittent drainage operations,1"
-"P00002,Use Case,Best For,Flooded basements and emergency water removal,1"
-"P00003,Advantage,Three Phase Efficiency,Better efficiency and reliability for continuous operation,1"
-"P00003,Advantage,Lower Power Rating,0.75 kW (1 HP) suitable for light drainage with three-phase power,2"
-"P00003,Advantage,Industrial Grade,Robust construction for commercial and agricultural use,3"
-"P00003,Limitation,Power Requirement,Requires three-phase connection not available in most homes,1"
-"P00003,Use Case,Best For,Farm drainage systems and commercial facilities,1"
-"P00003,Use Case,Not Recommended For,Residential homes without three-phase power,2"
-"P00014,Advantage,High Capacity,5 HP motor handles heavy solids and large flow volumes,1"
-"P00014,Advantage,Three Phase Reliability,Consistent performance for continuous duty applications,2"
-"P00014,Advantage,High Motor Efficiency,85.5% efficiency reduces operating costs significantly,3"
-"P00014,Advantage,Durable Construction,100L frame size ensures long service life,4"
-"P00014,Limitation,Power Infrastructure,Requires three-phase industrial power supply,1"
-"P00014,Limitation,Initial Investment,Higher cost compared to single-phase alternatives,2"
-"P00014,Use Case,Best For,Industrial sewage treatment and agricultural waste handling,1"
-"P00014,Use Case,Not Recommended For,Small residential applications or single-phase locations,2"
-"P00015,Advantage,Heavy Duty Performance,7.5 HP three-phase motor for demanding applications,1"
-"P00015,Advantage,Excellent Efficiency,87% motor efficiency among best in class,2"
-"P00015,Advantage,High Power Factor,0.86 power factor reduces reactive power consumption,3"
-"P00015,Advantage,Robust Build,132S frame with 93 kg weight ensures stability,4"
-"P00015,Limitation,Size and Weight,93 kg requires proper foundation and installation space,1"
-"P00015,Limitation,Operating Costs,Higher power consumption for large-scale operations,2"
-"P00015,Use Case,Best For,Large industrial sewage systems and treatment plants,1"
-"P00015,Use Case,Ideal Applications,Dairy farms, food processing, textile mills,2"
-"P00032,Advantage,Single Phase Convenience,5 HP single-phase option for areas without three-phase,1"
-"P00032,Advantage,Versatile Application,Suitable for domestic, agricultural, and light industrial,2"
-"P00032,Advantage,BEE 3-Star Rated,Energy efficient with BEE certification,3"
-"P00032,Advantage,Good Efficiency,85.5% motor efficiency for single-phase pump,4"
-"P00032,Limitation,Phase Limitations,Single phase limits power to 5 HP maximum,1"
-"P00032,Use Case,Best For,Large homes, small farms, and car wash systems,1"
-"P00032,Use Case,Ideal For,Areas with reliable single-phase but no three-phase power,2"
-"P00040,Advantage,Compact Multistage Design,Space-saving design for pressure boosting applications,1"
-"P00040,Advantage,Low Power Rating,0.5 HP (0.37 kW) energy efficient for continuous operation,2"
-"P00040,Advantage,Consistent Pressure,Multistage design maintains steady pressure,3"
-"P00040,Advantage,Three Phase Reliability,Stable operation for 24/7 pressure systems,4"
-"P00040,Limitation,Flow Capacity,Optimized for pressure, not high flow rates,1"
-"P00040,Limitation,Application Specific,Best for pressure boosting, not irrigation,2"
-"P00040,Use Case,Best For,Apartment building water pressure systems,1"
-"P00040,Use Case,Ideal For,RO plants and process water pressure boosting,2"
-"P00041,Advantage,BEE 4-Star Rating,Highly energy efficient with excellent power savings,1"
-"P00041,Advantage,Optimal Power,0.75 HP ideal for residential pressure requirements,2"
-"P00041,Advantage,Multistage Efficiency,Multiple impellers ensure consistent high pressure,3"
-"P00041,Advantage,Quiet Operation,Low vibration and noise levels for residential use,4"
-"P00041,Limitation,Installation Complexity,Requires proper sizing and pressure vessel,1"
-"P00041,Use Case,Best For,2-3 story residential buildings with pressure needs,1"
-"P00041,Use Case,Perfect For,Consistent bathroom pressure and overhead tank filling,2"
-"P00049,Advantage,Vertical Space Saving,Compact vertical design reduces footprint,1"
-"P00049,Advantage,Single Phase 1.5 HP,Convenient single-phase operation with adequate power,2"
-"P00049,Advantage,Pressure Stability,Maintains consistent pressure across multiple floors,3"
-"P00049,Advantage,Reliable MVR Series,Proven track record in residential complexes,4"
-"P00049,Limitation,Flow vs Pressure,Trades flow rate for pressure capability,1"
-"P00049,Use Case,Best For,Mid-rise apartment complexes and commercial buildings,1"
-"P00049,Use Case,Ideal For,Buildings requiring 3-5 floor pressure boosting,2"
-"P00050,Advantage,Higher Power Rating,2 HP provides strong pressure for taller buildings,1"
-"P00050,Advantage,Industrial Applications,Suitable for fire fighting and safety systems,2"
-"P00050,Advantage,Good Efficiency,81.3% efficiency for this power class,3"
-"P00050,Advantage,CE Certified,International quality standards for export markets,4"
-"P00050,Limitation,Power Requirement,2 HP requires proper electrical infrastructure,1"
-"P00050,Limitation,Cost,Higher initial and operating costs than smaller models,2"
-"P00050,Use Case,Best For,High-rise buildings and industrial fire safety,1"
-"P00050,Use Case,Perfect For,Cooling towers, HVAC systems, and process water,2"
+model_id,feature_category,feature_name,feature_value,display_order
+P00001,Advantage,Single Phase Operation,Easy installation in residential areas with standard power supply,1
+P00001,Advantage,Moderate Power Consumption,1.5 HP (1.1 kW) suitable for daily household drainage tasks,2
+P00001,Advantage,Good Motor Efficiency,79.6% motor efficiency reduces electricity costs,3
+P00001,Limitation,Limited Head,Suitable only for low to medium head drainage applications,1
+P00001,Use Case,Best For,Residential basement dewatering and sump drainage,1
+P00001,Use Case,Not Recommended For,Continuous industrial drainage or high-head applications,2
+P00002,Advantage,Reliable Drainage,CSP series proven track record for residential drainage,1
+P00002,Advantage,Easy Maintenance,Simple design with accessible components,2
+P00002,Advantage,Cost Effective,Budget-friendly option for home drainage needs,3
+P00002,Limitation,Flow Rate,Limited to intermittent drainage operations,1
+P00002,Use Case,Best For,Flooded basements and emergency water removal,1
+P00003,Advantage,Three Phase Efficiency,Better efficiency and reliability for continuous operation,1
+P00003,Advantage,Lower Power Rating,0.75 kW (1 HP) suitable for light drainage with three-phase power,2
+P00003,Advantage,Industrial Grade,Robust construction for commercial and agricultural use,3
+P00003,Limitation,Power Requirement,Requires three-phase connection not available in most homes,1
+P00003,Use Case,Best For,Farm drainage systems and commercial facilities,1
+P00003,Use Case,Not Recommended For,Residential homes without three-phase power,2
+P00014,Advantage,High Capacity,5 HP motor handles heavy solids and large flow volumes,1
+P00014,Advantage,Three Phase Reliability,Consistent performance for continuous duty applications,2
+P00014,Advantage,High Motor Efficiency,85.5% efficiency reduces operating costs significantly,3
+P00014,Advantage,Durable Construction,100L frame size ensures long service life,4
+P00014,Limitation,Power Infrastructure,Requires three-phase industrial power supply,1
+P00014,Limitation,Initial Investment,Higher cost compared to single-phase alternatives,2
+P00014,Use Case,Best For,Industrial sewage treatment and agricultural waste handling,1
+P00014,Use Case,Not Recommended For,Small residential applications or single-phase locations,2
+P00015,Advantage,Heavy Duty Performance,7.5 HP three-phase motor for demanding applications,1
+P00015,Advantage,Excellent Efficiency,87% motor efficiency among best in class,2
+P00015,Advantage,High Power Factor,0.86 power factor reduces reactive power consumption,3
+P00015,Advantage,Robust Build,132S frame with 93 kg weight ensures stability,4
+P00015,Limitation,Size and Weight,93 kg requires proper foundation and installation space,1
+P00015,Limitation,Operating Costs,Higher power consumption for large-scale operations,2
+P00015,Use Case,Best For,Large industrial sewage systems and treatment plants,1
+P00015,Use Case,Ideal Applications,Dairy farms food processing textile mills,2
+P00032,Advantage,Single Phase Convenience,5 HP single-phase option for areas without three-phase,1
+P00032,Advantage,Versatile Application,Suitable for domestic agricultural and light industrial,2
+P00032,Advantage,BEE 3-Star Rated,Energy efficient with BEE certification,3
+P00032,Advantage,Good Efficiency,85.5% motor efficiency for single-phase pump,4
+P00032,Limitation,Phase Limitations,Single phase limits power to 5 HP maximum,1
+P00032,Use Case,Best For,Large homes small farms and car wash systems,1
+P00032,Use Case,Ideal For,Areas with reliable single-phase but no three-phase power,2
+P00040,Advantage,Compact Multistage Design,Space-saving design for pressure boosting applications,1
+P00040,Advantage,Low Power Rating,0.5 HP (0.37 kW) energy efficient for continuous operation,2
+P00040,Advantage,Consistent Pressure,Multistage design maintains steady pressure,3
+P00040,Advantage,Three Phase Reliability,Stable operation for 24/7 pressure systems,4
+P00040,Limitation,Flow Capacity,Optimized for pressure not high flow rates,1
+P00040,Limitation,Application Specific,Best for pressure boosting not irrigation,2
+P00040,Use Case,Best For,Apartment building water pressure systems,1
+P00040,Use Case,Ideal For,RO plants and process water pressure boosting,2
+P00041,Advantage,BEE 4-Star Rating,Highly energy efficient with excellent power savings,1
+P00041,Advantage,Optimal Power,0.75 HP ideal for residential pressure requirements,2
+P00041,Advantage,Multistage Efficiency,Multiple impellers ensure consistent high pressure,3
+P00041,Advantage,Quiet Operation,Low vibration and noise levels for residential use,4
+P00041,Limitation,Installation Complexity,Requires proper sizing and pressure vessel,1
+P00041,Use Case,Best For,2-3 story residential buildings with pressure needs,1
+P00041,Use Case,Perfect For,Consistent bathroom pressure and overhead tank filling,2
+P00049,Advantage,Vertical Space Saving,Compact vertical design reduces footprint,1
+P00049,Advantage,Single Phase 1.5 HP,Convenient single-phase operation with adequate power,2
+P00049,Advantage,Pressure Stability,Maintains consistent pressure across multiple floors,3
+P00049,Advantage,Reliable MVR Series,Proven track record in residential complexes,4
+P00049,Limitation,Flow vs Pressure,Trades flow rate for pressure capability,1
+P00049,Use Case,Best For,Mid-rise apartment complexes and commercial buildings,1
+P00049,Use Case,Ideal For,Buildings requiring 3-5 floor pressure boosting,2
+P00050,Advantage,Higher Power Rating,2 HP provides strong pressure for taller buildings,1
+P00050,Advantage,Industrial Applications,Suitable for fire fighting and safety systems,2
+P00050,Advantage,Good Efficiency,81.3% efficiency for this power class,3
+P00050,Advantage,CE Certified,International quality standards for export markets,4
+P00050,Limitation,Power Requirement,2 HP requires proper electrical infrastructure,1
+P00050,Limitation,Cost,Higher initial and operating costs than smaller models,2
+P00050,Use Case,Best For,High-rise buildings and industrial fire safety,1
+P00050,Use Case,Perfect For,Cooling towers HVAC systems and process water,2

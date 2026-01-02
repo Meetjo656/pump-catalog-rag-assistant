@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import traceback
 import os
-import pickle
+import json
 from pump_master import get_all_pumps
 from rag_pipeline import (
     rag_explain_suitability,
@@ -11,23 +11,42 @@ from rag_pipeline import (
     rag_view_specs,
     rag_free_text,
 )
-from retriever import VECTOR_DIR  # uses same vector_store path
-
 
 app = Flask(__name__)
 CORS(app)
-
 DATA_VERSION = "v2_structured_csv_2025"
 
+def bad_request(message: str):
+    return jsonify({
+        "status": "error",
+        "message": message
+    }), 400
+
+FRONTEND_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "..", "frontend"
+)
+
+@app.route("/")
+def serve_frontend():
+    return send_from_directory(FRONTEND_DIR, "static.html")
+
+@app.route("/styles.css")
+def serve_css():
+    return send_from_directory(FRONTEND_DIR, "styles.css")
 
 @app.route("/ask", methods=["POST"])
 def ask():
-    data = request.json or {}
-
     try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"answer": {"error": "Invalid JSON"}}), 400
+
         if "intent" in data:
             intent = data["intent"]
             params = data.get("params", {})
+            if not isinstance(params, dict):
+                return bad_request("'params' must be an object")
 
             if intent == "explain_suitability":
                 answer = rag_explain_suitability(params)
@@ -38,57 +57,79 @@ def ask():
             elif intent == "view_specs":
                 answer = rag_view_specs(params)
             else:
-                return jsonify({"error": f"Unknown intent: {intent}"}), 400
+                return bad_request(f"Unknown intent: {intent}")
 
             return jsonify({
+                "status": "success",
                 "intent": intent,
                 "answer": answer,
-                "source": "rag",
+                "source": "rag"
             }), 200
 
-        elif "question" in data:
-            answer = rag_free_text(data["question"])
+        if "question" in data:
+            question = data["question"]
+            if not isinstance(question, str) or not question.strip():
+                return bad_request("'question' must be a non-empty string")
+            answer = rag_free_text(question)
             return jsonify({
+                "status": "success",
                 "intent": "free_text",
                 "answer": answer,
-                "source": "rag",
+                "source": "rag"
             }), 200
 
-        else:
-            return jsonify({
-                "error": "Request must contain 'intent' or 'question'"
-            }), 400
+        return bad_request("Request must include 'intent' or 'question'")
 
     except ValueError as ve:
-        return jsonify({"error": str(ve)}), 400
+        return bad_request(str(ve))
     except Exception:
         print("🔥 INTERNAL SERVER ERROR 🔥")
         traceback.print_exc()
-        return jsonify({"error": "Internal server error"}), 500
-
+        return jsonify({
+            "status": "error",
+            "message": "Internal server error"
+        }), 500
 
 @app.route("/models", methods=["GET"])
 def list_models():
     try:
         pumps = get_all_pumps()
         return jsonify({
+            "status": "success",
             "models": pumps,
             "count": len(pumps)
         }), 200
     except Exception as e:
         print("ERROR in /models:", e)
         traceback.print_exc()
-        return jsonify({"models": [], "error": str(e)}), 500
-
-
+        return jsonify({
+            "status": "error",
+            "models": [],
+            "message": str(e)
+        }), 500
 
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({
         "status": "ok",
-        "data_version": DATA_VERSION,
+        "data_version": DATA_VERSION
     }), 200
 
+@app.route("/safe-questions", methods=["GET"])
+def safe_questions():
+    try:
+        path = os.path.join(os.path.dirname(__file__), "safe_questions.json")
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return jsonify({
+            "status": "success",
+            "data": data
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
